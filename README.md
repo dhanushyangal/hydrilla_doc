@@ -1,24 +1,37 @@
-# Hydrilla AI Documentation (`docs.hydrilla.ai`)
+# Hydrilla AI Documentation (`docs.hydrilla.co` / `docs.hydrilla.ai`)
 
-This directory contains the developer documentation for the Hydrilla AI REST API, powered by [Mintlify](https://mintlify.com).
+Official developer documentation web application for the Hydrilla AI platform, built with Next.js 15 App Router, React 19, and Tailwind CSS.
+
+## Features
+
+- **Interactive API Reference**: Comprehensive specifications for 3D generation (Text-to-3D, Image-to-3D, Task Polling), 2D generation & editing (OpenAI Flare / Sunburst & Google Gemini Flash / Pro Image), and account quotas.
+- **Multi-Language Snippets**: Instant, copyable cURL, Python, and TypeScript code blocks with request payloads and responses.
+- **Search & Navigation**: Fast client-side search across endpoints, guides, and SDK examples.
+- **OpenAPI 3.1 Spec**: Raw OpenAPI specification available at `/openapi.json`.
+- **Zero-Config Vercel Deployment**: Automatically detected as a Next.js project by Vercel.
 
 ## Local Development
 
-1. Install the Mintlify CLI:
-   ```bash
-   npm i -g mintlify
-   ```
+```bash
+# Install dependencies
+npm install
 
-2. Run the local preview server from this directory:
-   ```bash
-   cd hydrilla/docs
-   mintlify dev
-   ```
+# Start local dev server on port 3001
+npm run dev
 
-3. Open `http://localhost:3000` to view the documentation.
+# Open http://localhost:3001
+```
 
-## Deployment to `docs.hydrilla.ai`
+## Production Build
 
-- Connect the GitHub repository to your [Mintlify Dashboard](https://dashboard.mintlify.com).
-- Set the custom domain to `docs.hydrilla.ai`.
-- Mintlify will automatically generate SSL certificates and deploy updates whenever commits are pushed to the main branch.
+```bash
+npm run build
+npm run start
+```
+
+## Vercel Deployment
+
+1. Import repository `git@github.com:dhanushyangal/hydrilla_doc.git` on [Vercel](https://vercel.com/new).
+2. Framework Preset: **Next.js** (auto-detected).
+3. Click **Deploy**.
+4. In Project Settings &rarr; **Domains**, attach your custom domain (`docs.hydrilla.co` or `docs.hydrilla.ai`).
