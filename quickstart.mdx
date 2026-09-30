@@ -1,0 +1,124 @@
+---
+title: Quickstart
+description: Get up and running with the Hydrilla AI API in 3 simple steps.
+---
+
+# Quickstart Guide
+
+This guide walks you through generating your first 3D asset using the Hydrilla AI REST API.
+
+## Step 1: Create your API Key
+
+1. Log in to [Hydrilla Studio](https://hydrilla.co).
+2. Navigate to **API Keys** in your sidebar or visit [hydrilla.co/app/api-keys](https://hydrilla.co/app/api-keys).
+3. Click **Create Secret Key**, assign it a name (e.g. `Dev-Test`), and copy the generated secret key (`hyd_live_...`).
+
+<Warning>
+  Store your API key in a secure secrets manager or `.env` file. You will not be able to view the secret again after closing the dialog.
+</Warning>
+
+## Step 2: Trigger 3D Reconstruction
+
+Submit an image URL to the `POST /v1/3d/image-to-3d` endpoint:
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://api.hydrilla.ai/v1/3d/image-to-3d \
+  -H "Authorization: Bearer hyd_live_your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "image_url": "https://assets.hydrilla.ai/sample-shoe.png",
+    "resolution": 1536
+  }'
+```
+
+```python Python
+import requests
+
+API_KEY = "hyd_live_your_api_key_here"
+url = "https://api.hydrilla.ai/v1/3d/image-to-3d"
+
+payload = {
+    "image_url": "https://assets.hydrilla.ai/sample-shoe.png",
+    "resolution": 1536
+}
+headers = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+task = response.json()
+print("Task ID:", task["id"])
+```
+
+```typescript TypeScript
+import fetch from "node-fetch";
+
+const API_KEY = "hyd_live_your_api_key_here";
+
+const response = await fetch("https://api.hydrilla.ai/v1/3d/image-to-3d", {
+  method: "POST",
+  headers: {
+    "Authorization": `Bearer ${API_KEY}`,
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    image_url: "https://assets.hydrilla.ai/sample-shoe.png",
+    resolution: 1536
+  })
+});
+
+const task = await response.json();
+console.log("Task ID:", task.id);
+```
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "id": "task_892f3a12",
+  "object": "task",
+  "type": "image-to-3d",
+  "model": "bluefox-1",
+  "status": "PENDING",
+  "resolution": 1536,
+  "jobs_ahead": 0,
+  "progress": 0,
+  "created_at": 1727670000
+}
+```
+
+## Step 3: Poll for Completion & Download Mesh
+
+Query `GET /v1/3d/tasks/{taskId}` every 5 to 10 seconds until `status` is `SUCCEEDED`:
+
+```bash
+curl https://api.hydrilla.ai/v1/3d/tasks/task_892f3a12 \
+  -H "Authorization: Bearer hyd_live_your_api_key_here"
+```
+
+When completed, the response includes the direct download URL for the textured GLB file:
+
+```json
+{
+  "id": "task_892f3a12",
+  "object": "task",
+  "type": "image-to-3d",
+  "status": "SUCCEEDED",
+  "progress": 100,
+  "model": "bluefox-1",
+  "result": {
+    "mesh_url": "https://hydrilla-outputs-1.s3.amazonaws.com/outputs/image/task_892f3a12/mesh.glb",
+    "preview_image_url": "https://hydrilla-outputs-1.s3.amazonaws.com/outputs/image/task_892f3a12/input.png",
+    "format": "glb",
+    "face_count": 820000,
+    "model": "bluefox-1"
+  },
+  "created_at": 1727670000,
+  "completed_at": 1727670350
+}
+```
+
+Now you can load `mesh_url` directly into Three.js, Babylon.js, Blender, or Unity!

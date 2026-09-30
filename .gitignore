@@ -1,0 +1,9 @@
+# Dependencies
+node_modules/
+
+# Mintlify cache & builds
+.mintlify/
+
+# System files
+.DS_Store
+*.log

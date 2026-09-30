@@ -1,0 +1,64 @@
+---
+title: Authentication
+description: Securely authenticate your API requests to the Hydrilla AI platform.
+---
+
+# Authentication
+
+The Hydrilla AI API uses API keys to authenticate requests. You can view and manage your API keys in the [Developer Dashboard](https://hydrilla.co/app/api-keys).
+
+All API requests must be made over HTTPS. Calls made over plain HTTP will fail.
+
+## Bearer Token Header
+
+Pass your API key in the standard `Authorization` HTTP header:
+
+```bash
+Authorization: Bearer hyd_live_1234567890abcdef1234567890abcdef
+```
+
+Alternatively, you can supply your key using the `x-api-key` header:
+
+```bash
+x-api-key: hyd_live_1234567890abcdef1234567890abcdef
+```
+
+## Credits & Quotas
+
+Each API generation deducts credits from your workspace balance:
+
+| Endpoint | Operation | Default Cost |
+| :--- | :--- | :--- |
+| `POST /v1/3d/image-to-3d` | 3D Mesh Reconstruction | **10 credits** |
+| `POST /v1/3d/text-to-3d` | Concept Image + 3D Mesh | **12 - 15 credits** |
+| `POST /v1/images/generate` | 2D Image Draft (Low) | **2 credits** |
+| `POST /v1/images/generate` | 2D Image High-Res | **5 credits** |
+| `POST /v1/images/edit` | 2D Image Edit (Low / High) | **3 / 6 credits** |
+
+If your balance reaches zero, the API responds with `402 Payment Required`. If a generation task encounters an upstream error or queue failure, deducted credits are automatically and instantly refunded to your balance.
+
+## Error Handling
+
+Hydrilla AI returns standard HTTP status codes:
+
+| Code | Status | Meaning |
+| :--- | :--- | :--- |
+| `200` | OK | Request succeeded. |
+| `400` | Bad Request | Missing required parameters or invalid options. |
+| `401` | Unauthorized | Missing, invalid, or revoked API key. |
+| `402` | Payment Required | Credit balance exhausted. Top up via Studio. |
+| `403` | Forbidden | Trying to access a resource that does not belong to your account. |
+| `404` | Not Found | Task or resource ID does not exist. |
+| `500` / `502` | Server Error | Internal pipeline or GPU communication error. |
+
+### Error Response Format
+
+```json
+{
+  "error": {
+    "message": "Authentication required. Provide your Hydrilla API key in the Authorization header.",
+    "type": "authentication_error",
+    "code": "api_key_missing"
+  }
+}
+```

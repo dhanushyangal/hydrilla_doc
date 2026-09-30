@@ -1,0 +1,45 @@
+---
+title: Introduction to Hydrilla AI
+description: Build next-generation 3D generation pipelines using BlueFox 3D and multi-model image generation.
+---
+
+# Welcome to Hydrilla AI
+
+Hydrilla AI provides developer APIs for generative 3D modeling and multi-model visual intelligence. With our REST API, developers and studios can automate asset production, build DCC plugins (Blender, Maya, Unreal Engine, Unity), and integrate real-time 3D generation into their games, spatial applications, and eCommerce pipelines.
+
+<CardGroup cols={2}>
+  <Card title="Quickstart Guide" icon="bolt" href="/quickstart">
+    Generate your first 3D GLB model in under 5 minutes using cURL or Python.
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/image-to-3d">
+    Explore OpenAPI specifications and interactive request execution.
+  </Card>
+  <Card title="Models & Benchmarks" icon="microchip" href="/models">
+    Learn about BlueFox 3D cascade resolutions, VRAM optimizations, and quality metrics.
+  </Card>
+  <Card title="Get API Key" icon="key" href="https://hydrilla.co/app/api-keys">
+    Create secret developer keys in your Hydrilla dashboard.
+  </Card>
+</CardGroup>
+
+## Core Capabilities
+
+- **Single Image to 3D**: Transform any reference photo, character turnaround, or concept art into a high-polygon textured 3D mesh (GLB) with 4096 PBR materials.
+- **Text to 3D Pipeline**: Provide a descriptive prompt. Our pipeline first crafts an orthographically optimized concept image (via OpenAI or Google Gemini), and immediately feeds it into our 3D reconstruction cascade.
+- **2D Image Generation & Inpainting / Editing**: Multi-model access to OpenAI (`gpt-image-2.5`) and Google Gemini (`gemini-3`) for generating character turnarounds, props, and textures before 3D meshing.
+- **Enterprise Performance**: Dedicated NVIDIA L4 GPU clusters powered by our low-VRAM memory-swapping pipeline capable of 1536 resolution mesh cascades.
+
+## API Base URLs
+
+All developer API requests are served over HTTPS:
+
+| Environment | Base URL |
+| :--- | :--- |
+| **Production API** | `https://api.hydrilla.ai` |
+| **Alternative Gateway** | `https://api.hydrilla.co` |
+
+Authentication is performed via HTTP Bearer token headers:
+
+```bash
+Authorization: Bearer hyd_live_your_api_key_here
+```

@@ -1,0 +1,88 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Hydrilla AI",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#4F46E5",
+    "light": "#4F46E5",
+    "dark": "#6366F1",
+    "anchors": {
+      "from": "#0F172A",
+      "to": "#334155"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Studio",
+      "url": "https://hydrilla.co/app/studio"
+    },
+    {
+      "name": "API Keys",
+      "url": "https://hydrilla.co/app/api-keys"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get API Key",
+    "url": "https://hydrilla.co/app/api-keys"
+  },
+  "anchors": [
+    {
+      "name": "Documentation",
+      "icon": "book-open",
+      "url": "introduction"
+    },
+    {
+      "name": "API Reference",
+      "icon": "code",
+      "url": "api-reference/image-to-3d"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "introduction",
+        "quickstart",
+        "authentication",
+        "models"
+      ]
+    },
+    {
+      "group": "SDKs & Examples",
+      "pages": [
+        "sdks/python",
+        "sdks/typescript"
+      ]
+    },
+    {
+      "group": "3D Generation API",
+      "pages": [
+        "api-reference/image-to-3d",
+        "api-reference/text-to-3d",
+        "api-reference/tasks"
+      ]
+    },
+    {
+      "group": "2D Image API",
+      "pages": [
+        "api-reference/images-generate",
+        "api-reference/images-edit"
+      ]
+    },
+    {
+      "group": "Models & Account",
+      "pages": [
+        "api-reference/models",
+        "api-reference/user-me"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "github": "https://github.com/dhanushyangal",
+    "twitter": "https://twitter.com/hydrilla_ai"
+  }
+}

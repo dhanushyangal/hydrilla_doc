@@ -1,0 +1,10 @@
+{
+  "name": "@hydrilla/docs",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "mintlify dev --port 3001",
+    "start": "mintlify dev --port 3001",
+    "broken-links": "mintlify broken-links"
+  }
+}

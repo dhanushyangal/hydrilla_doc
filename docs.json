@@ -1,0 +1,92 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Hydrilla AI",
+  "theme": "mint",
+  "colors": {
+    "primary": "#4F46E5",
+    "light": "#4F46E5",
+    "dark": "#6366F1"
+  },
+  "favicon": "/favicon.png",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Studio",
+        "href": "https://hydrilla.co/app/studio"
+      },
+      {
+        "label": "API Keys",
+        "href": "https://hydrilla.co/app/api-keys"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get API Key",
+      "href": "https://hydrilla.co/app/api-keys"
+    }
+  },
+  "navigation": {
+    "anchors": [
+      {
+        "anchor": "Documentation",
+        "icon": "book-open",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "authentication",
+              "models"
+            ]
+          },
+          {
+            "group": "SDKs & Examples",
+            "pages": [
+              "sdks/python",
+              "sdks/typescript"
+            ]
+          }
+        ]
+      },
+      {
+        "anchor": "API Reference",
+        "icon": "code",
+        "groups": [
+          {
+            "group": "3D Generation API",
+            "pages": [
+              "api-reference/image-to-3d",
+              "api-reference/text-to-3d",
+              "api-reference/tasks"
+            ]
+          },
+          {
+            "group": "2D Image API",
+            "pages": [
+              "api-reference/images-generate",
+              "api-reference/images-edit"
+            ]
+          },
+          {
+            "group": "Models & Account",
+            "pages": [
+              "api-reference/models",
+              "api-reference/user-me"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/dhanushyangal",
+      "twitter": "https://twitter.com/hydrilla_ai"
+    }
+  }
+}

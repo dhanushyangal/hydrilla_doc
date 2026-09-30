@@ -1,0 +1,58 @@
+---
+title: Python Integration Guide
+description: Complete Python workflow with automatic polling and GLB saving.
+---
+
+# Python Integration
+
+This script triggers a 3D generation from a local image file or URL, monitors the task progress until completion, and downloads the resulting GLB mesh directly to your disk.
+
+```python
+import os
+import time
+import requests
+
+API_KEY = os.environ.get("HYDRILLA_API_KEY", "hyd_live_your_key_here")
+BASE_URL = "https://api.hydrilla.ai/v1"
+HEADERS = {"Authorization": f"Bearer {API_KEY}"}
+
+def generate_3d_from_image(image_url: str, output_path: str = "output.glb") -> str:
+    # 1. Trigger generation
+    print(f"Submitting image {image_url} to BlueFox 3D...")
+    payload = {
+        "image_url": image_url,
+        "resolution": 1536
+    }
+    res = requests.post(f"{BASE_URL}/3d/image-to-3d", headers=HEADERS, json=payload)
+    res.raise_for_status()
+    task = res.json()
+    task_id = task["id"]
+    print(f"Task created: {task_id}. Polling for progress...")
+
+    # 2. Poll until completed
+    while True:
+        status_res = requests.get(f"{BASE_URL}/3d/tasks/{task_id}", headers=HEADERS)
+        status_res.raise_for_status()
+        data = status_res.json()
+        status = data["status"]
+        progress = data.get("progress", 0)
+
+        print(f"Status: {status} ({progress}%)")
+
+        if status == "SUCCEEDED":
+            mesh_url = data["result"]["mesh_url"]
+            print(f"Generation successful! Downloading GLB from {mesh_url}")
+            glb_data = requests.get(mesh_url).content
+            with open(output_path, "wb") as f:
+                f.write(glb_data)
+            print(f"Saved 3D model to {output_path}")
+            return output_path
+        elif status in ["FAILED", "CANCELLED"]:
+            error = data.get("error", "Unknown error")
+            raise RuntimeError(f"3D Generation failed: {error}")
+
+        time.sleep(5)
+
+if __name__ == "__main__":
+    generate_3d_from_image("https://assets.hydrilla.ai/sample-shoe.png", "shoe.glb")
+```

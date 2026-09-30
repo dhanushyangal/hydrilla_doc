@@ -1,0 +1,36 @@
+---
+title: List Models
+api: GET /v1/models
+description: Retrieve supported 3D and 2D vision models and their specifications.
+---
+
+# List Models
+
+Returns the catalog of 3D reconstruction pipelines and 2D image models currently accessible with your API credentials.
+
+<RequestExample>
+```bash cURL
+curl https://api.hydrilla.ai/v1/models \
+  -H "Authorization: Bearer hyd_live_your_api_key_here"
+```
+</RequestExample>
+
+### Response
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "bluefox-1",
+      "object": "model",
+      "type": "3d",
+      "name": "BlueFox 3D (Cascade 1536)",
+      "description": "High-resolution textured 3D mesh reconstruction from single image or text with 4096 PBR maps.",
+      "resolutions": [1024, 1536],
+      "output_formats": ["glb"],
+      "credit_cost": 10
+    }
+  ]
+}
+```

@@ -1,0 +1,47 @@
+---
+title: Tasks & Polling
+api: GET /v1/3d/tasks/{taskId}
+description: Track generation progress and retrieve completed GLB meshes.
+---
+
+# Tasks & Status
+
+Poll this endpoint to monitor the progress of a 3D generation run.
+
+### Path Parameters
+
+<ParamField path="taskId" type="string" required>
+  The unique ID returned when creating the task.
+</ParamField>
+
+### Response
+
+<ResponseField name="status" type="string">
+  Current status: `PENDING`, `IN_PROGRESS`, `SUCCEEDED`, `FAILED`, or `CANCELLED`.
+</ResponseField>
+
+<ResponseField name="progress" type="integer">
+  Estimated generation completion percentage from 0 to 100.
+</ResponseField>
+
+<ResponseField name="result" type="object">
+  Object containing the final mesh links once status is `SUCCEEDED`.
+  <Expandable title="properties">
+    <ResponseField name="mesh_url" type="string">
+      Direct HTTPS URL to download the textured GLB file.
+    </ResponseField>
+    <ResponseField name="preview_image_url" type="string">
+      URL of the background-removed concept image.
+    </ResponseField>
+    <ResponseField name="format" type="string">
+      `glb`.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl https://api.hydrilla.ai/v1/3d/tasks/task_abc123 \
+  -H "Authorization: Bearer hyd_live_your_api_key_here"
+```
+</RequestExample>

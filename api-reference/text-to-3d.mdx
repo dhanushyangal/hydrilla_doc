@@ -1,0 +1,50 @@
+---
+title: Generate 3D from Text
+api: POST /v1/3d/text-to-3d
+description: Generate a 3D model directly from a textual prompt.
+---
+
+# Text to 3D Generation
+
+Pipelines prompt compilation, concept image rendering (via OpenAI or Google Gemini), and 3D mesh reconstruction.
+
+### Request Body (JSON)
+
+<ParamField body="prompt" type="string" required>
+  Description of the object or character you wish to generate.
+</ParamField>
+
+<ParamField body="image_model" type="object">
+  Optional configuration for the concept image step.
+  <Expandable title="properties">
+    <ParamField body="provider" type="string" default="openai">
+      `openai` or `gemini`.
+    </ParamField>
+    <ParamField body="quality" type="string" default="high">
+      `low` (draft) or `high` (production).
+    </ParamField>
+    <ParamField body="aspect" type="string" default="1:1">
+      `1:1`, `3:2`, or `2:3`.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="resolution" type="integer" default="1536">
+  Target 3D cascade resolution: `1024` or `1536`.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -X POST https://api.hydrilla.ai/v1/3d/text-to-3d \
+  -H "Authorization: Bearer hyd_live_your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "Futuristic cyberpunk vehicle, high details, game ready prop",
+    "image_model": {
+      "provider": "openai",
+      "quality": "high"
+    },
+    "resolution": 1536
+  }'
+```
+</RequestExample>

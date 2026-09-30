@@ -1,0 +1,66 @@
+---
+title: Models & Benchmarks
+description: Specifications and benchmarks for BlueFox 3D and multi-model 2D generators.
+---
+
+# Models & Architecture
+
+Hydrilla AI orchestrates state-of-the-art vision and geometry neural models to produce production-grade 3D assets.
+
+## 3D Reconstruction: BlueFox 3D (`bluefox-1`)
+
+**BlueFox 3D** is our flagship image-to-3D neural reconstruction engine running on Google Cloud Platform GPU instances.
+
+### Key Specifications
+
+| Specification | Value |
+| :--- | :--- |
+| **Model ID** | `bluefox-1` |
+| **Architecture** | Structured Latent Flow-Euler Diffusion + MoGe-2 Geometry + BiRefNet |
+| **Cascade Resolutions** | **1536** (Standard Production) / **1024** (Rapid Draft) |
+| **Texture Output** | 4096×4096 PBR Materials (Albedo, Normal, Roughness, Metallic) |
+| **Target Polygon Count** | Up to 1,000,000 triangular faces (decimation selectable) |
+| **Format** | Standard GLB (binary glTF 2.0) |
+| **Inference Hardware** | 1× NVIDIA L4 24 GB GPU (low-VRAM staged pipeline) |
+| **Generation Latency** | ~4 to 7 minutes on NVIDIA L4 |
+
+### Pipeline Breakdown
+
+```
+[Input Image / Prompt]
+         │
+         ▼
+[BiRefNet Background Removal] ──> Removes clutter & produces transparent RGBA
+         │
+         ▼
+[MoGe-2 Normal & Depth Estimation] ──> Extracts geometric prior on GPU
+         │
+         ▼
+[BlueFox 3D Latent Flow Cascade] ──> Generates 1536 resolution structured latent
+         │
+         ▼
+[Mesh Extraction & UV Unwrap] ──> Decimation + PBR texture projection
+         │
+         ▼
+[Production GLB Output] ──> Uploaded to S3 with CDN delivery
+```
+
+---
+
+## 2D Image Engines (Multi-Model)
+
+When using `POST /v1/images/generate` or `POST /v1/3d/text-to-3d`, you can choose between industry-leading image models:
+
+### 1. OpenAI Image Suite (`openai`)
+- **`gpt-image-2.5-sunburst` (High Quality)**: Generates 2048×2048 high-resolution concept art with crisp hard-surface lines and balanced studio lighting.
+- **`gpt-image-2.5-flare` (Low Quality)**: 1024×1024 rapid draft generator optimized for fast ideation.
+
+### 2. Google Gemini Suite (`gemini`)
+- **`gemini-3-pro-image` (High Quality)**: 2K resolution cinematic imagery with rich volumetric lighting.
+- **`gemini-3.1-flash-image` (Low Quality)**: Sub-second 1K image synthesis ideal for real-time prompt generation.
+
+### Aspect Ratios
+All 2D models support:
+- `1:1` (Square - 1024×1024 or 2048×2048) - Ideal for props and avatars.
+- `3:2` (Landscape - 1536×1024 or 2304×1536) - Ideal for vehicles and environments.
+- `2:3` (Portrait - 1024×1536 or 1536×2304) - Ideal for characters and upright structures.

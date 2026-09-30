@@ -1,0 +1,67 @@
+---
+title: TypeScript Integration Guide
+description: Complete TypeScript / Node.js script for 3D model generation.
+---
+
+# TypeScript Integration
+
+This snippet demonstrates submitting a text-to-3d generation task, polling until completion, and saving the output GLB.
+
+```typescript
+import fs from "fs/promises";
+
+const API_KEY = process.env.HYDRILLA_API_KEY || "hyd_live_your_key_here";
+const BASE_URL = "https://api.hydrilla.ai/v1";
+
+async function generate3dFromText(prompt: string, outputPath: string = "model.glb"): Promise<void> {
+  console.log(`Generating 3D model for prompt: "${prompt}"...`);
+
+  // 1. Submit Text-to-3D task
+  const submitRes = await fetch(`${BASE_URL}/3d/text-to-3d`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      prompt,
+      image_model: { provider: "openai", quality: "high" },
+      resolution: 1536
+    })
+  });
+
+  if (!submitRes.ok) {
+    throw new Error(`Failed to submit job: ${submitRes.statusText}`);
+  }
+
+  const task = await submitRes.json();
+  const taskId = task.id;
+  console.log(`Task created: ${taskId}. Waiting for completion...`);
+
+  // 2. Poll until SUCCEEDED
+  while (true) {
+    const statusRes = await fetch(`${BASE_URL}/3d/tasks/${taskId}`, {
+      headers: { Authorization: `Bearer ${API_KEY}` }
+    });
+    const data = await statusRes.json();
+
+    console.log(`Status: ${data.status} (${data.progress ?? 0}%)`);
+
+    if (data.status === "SUCCEEDED") {
+      const meshUrl = data.result.mesh_url;
+      console.log(`Downloading GLB from: ${meshUrl}`);
+      const glbRes = await fetch(meshUrl);
+      const buffer = Buffer.from(await glbRes.arrayBuffer());
+      await fs.writeFile(outputPath, buffer);
+      console.log(`Successfully saved 3D model to ${outputPath}!`);
+      break;
+    } else if (data.status === "FAILED" || data.status === "CANCELLED") {
+      throw new Error(`Generation ended with status ${data.status}: ${data.error}`);
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+  }
+}
+
+generate3dFromText("Stylized wooden treasure chest with glowing runes", "chest.glb");
+```
